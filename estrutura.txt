@@ -1,0 +1,35 @@
+
+
+
+
+
+
+
+
+
+
+
+
+├── app
+│   ├── init.py
+│   ├── routes
+│   │   ├── hardware_routes.py
+│   │   └── server_routes.py
+│   ├── services
+│   │   └── serial_service.py
+│   ├── static
+│   │   ├── css
+│   │   ├── img
+│   │   └── lib
+│   └── templates
+│       ├── home
+│       │   ├── home.html
+│       │   ├── home.css
+│       │   └── home.js
+├── estrutura.txt
+├── LICENSE
+├── README.txt
+├── requirements.txt
+├── run.py
+└── venv
+

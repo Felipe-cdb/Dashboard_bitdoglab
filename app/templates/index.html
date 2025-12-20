@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Varejo - Conversão & Clima</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+            --text-gray: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--white);
+            padding: 20px;
+            border-right: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            color: var(--text-gray);
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: #eff6ff;
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header h2 {
+            color: var(--dark);
+        }
+
+        .date-filter {
+            background: var(--white);
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            color: var(--text-gray);
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border: 1px solid #e2e8f0;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .card-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .card-change {
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        .positive { color: var(--success); }
+        .negative { color: var(--danger); }
+
+        /* Charts Section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            height: 400px;
+            position: relative;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">
+            <i class="ph ph-storefront"></i>
+            LojaAnalytics
+        </div>
+        <div class="nav-item active">
+            <i class="ph ph-squares-four"></i> Dashboard
+        </div>
+        <div class="nav-item">
+            <i class="ph ph-chart-line-up"></i> Relatórios
+        </div>
+        <div class="nav-item">
+            <i class="ph ph-thermometer"></i> Clima & Vendas
+        </div>
+        <div class="nav-item">
+            <i class="ph ph-gear"></i> Configurações
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div>
+                <h2>Visão Geral da Loja</h2>
+                <p style="color: var(--text-gray)">Análise de tráfego, conversão e impacto térmico.</p>
+            </div>
+            <div class="date-filter">
+                <i class="ph ph-calendar-blank"></i> Hoje: 19 Dez, 2025
+            </div>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">VISITANTES TOTAIS</span>
+                    <div class="card-icon" style="background: #eff6ff; color: var(--primary);">
+                        <i class="ph ph-users"></i>
+                    </div>
+                </div>
+                <div class="card-value">1,248</div>
+                <div class="card-change positive"><i class="ph ph-trend-up"></i> +12% vs ontem</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">VENDAS REALIZADAS</span>
+                    <div class="card-icon" style="background: #ecfdf5; color: var(--success);">
+                        <i class="ph ph-shopping-bag"></i>
+                    </div>
+                </div>
+                <div class="card-value">312</div>
+                <div class="card-change positive"><i class="ph ph-trend-up"></i> +5% vs ontem</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">TAXA DE CONVERSÃO</span>
+                    <div class="card-icon" style="background: #fff7ed; color: var(--warning);">
+                        <i class="ph ph-chart-pie-slice"></i>
+                    </div>
+                </div>
+                <div class="card-value">25.0%</div>
+                <div class="card-change negative"><i class="ph ph-trend-down"></i> -1.2% vs média</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">TEMP. MÉDIA LOJA</span>
+                    <div class="card-icon" style="background: #fef2f2; color: var(--danger);">
+                        <i class="ph ph-thermometer-simple"></i>
+                    </div>
+                </div>
+                <div class="card-value">22°C</div>
+                <div class="card-change positive">Ideal para compras</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-container">
+                <canvas id="mainChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h4 style="margin-bottom: 15px; color: var(--dark);">Funil de Vendas</h4>
+                <div style="height: 300px; display: flex; justify-content: center;">
+                    <canvas id="conversionChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container full-width">
+                <canvas id="tempChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados estáticos simulados (Horário: 10h às 20h)
+        const hours = ['10h', '11h', '12h', '13h', '14h', '15h', '16h', '17h', '18h', '19h', '20h'];
+        const visitorsData = [45, 60, 120, 110, 80, 95, 150, 180, 200, 130, 78];
+        const salesData =    [10, 15,  40,  35, 20, 25,  45,  60,  70,  40, 22];
+        const tempData =     [19, 21,  24,  26, 27, 28,  26,  24,  22,  20, 19]; // Temperatura externa
+
+        // 1. Gráfico Principal: Tráfego vs Vendas
+        const ctxMain = document.getElementById('mainChart').getContext('2d');
+        new Chart(ctxMain, {
+            type: 'bar',
+            data: {
+                labels: hours,
+                datasets: [
+                    {
+                        label: 'Visitantes (Entrada)',
+                        data: visitorsData,
+                        backgroundColor: 'rgba(37, 99, 235, 0.5)', // Azul
+                        borderColor: '#2563eb',
+                        borderWidth: 1,
+                        order: 2
+                    },
+                    {
+                        label: 'Vendas (Conversão)',
+                        data: salesData,
+                        type: 'line',
+                        borderColor: '#10b981', // Verde
+                        backgroundColor: '#10b981',
+                        borderWidth: 3,
+                        pointRadius: 4,
+                        tension: 0.4,
+                        order: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Tráfego de Pessoas x Vendas Realizadas (Por Hora)',
+                        font: { size: 16 }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 2. Gráfico de Rosca: Conversão Global
+        const ctxConv = document.getElementById('conversionChart').getContext('2d');
+        new Chart(ctxConv, {
+            type: 'doughnut',
+            data: {
+                labels: ['Compraram', 'Não Compraram'],
+                datasets: [{
+                    data: [312, 936], // Total Vendas vs (Visitantes - Vendas)
+                    backgroundColor: [
+                        '#10b981', // Verde
+                        '#e2e8f0'  // Cinza
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // 3. Gráfico de Correlação: Temperatura vs Vendas
+        const ctxTemp = document.getElementById('tempChart').getContext('2d');
+        new Chart(ctxTemp, {
+            type: 'line',
+            data: {
+                labels: hours,
+                datasets: [
+                    {
+                        label: 'Volume de Vendas',
+                        data: salesData,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        yAxisID: 'y',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Temperatura (°C)',
+                        data: tempData,
+                        borderColor: '#ef4444', // Vermelho
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        yAxisID: 'y1',
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Impacto da Temperatura nas Vendas',
+                        font: { size: 16 }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: { display: true, text: 'Vendas' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                        title: { display: true, text: 'Temperatura (°C)' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
