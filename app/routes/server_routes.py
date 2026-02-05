@@ -1,16 +1,12 @@
 from flask import Blueprint, jsonify, render_template
+from app.services.hardware_state import get_state
 
 server_bp = Blueprint("server", __name__)
 
-# Página inicial do dashboard
 @server_bp.route("/")
 def dashboard():
     return render_template("dashboard/dashboard.html")
 
-# Health check
-@server_bp.route("/health", methods=["GET"])
-def health_check():
-    return jsonify({
-        "status": "ok",
-        "message": "Servidor Flask ativo"
-    }), 200
+@server_bp.route("/api/state", methods=["GET"])
+def api_state():
+    return jsonify(get_state()), 200
