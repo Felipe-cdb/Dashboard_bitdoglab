@@ -1,19 +1,18 @@
-from flask import Blueprint, render_template, request
-from app.services.mdns_service import  encerrar_servidor
-from app.services.blockly_service import executar_codigo
-from flask import render_template
+from flask import Blueprint, jsonify, render_template
 
-server = Blueprint("server", __name__)
+server_bp = Blueprint("server", __name__)
 
-@server.route("/")
-def index():
-    return render_template("index.html")
+# Página inicial do dashboard
+@server_bp.route("/")
+def home():
+    return render_template("dashboard/dashboard.html")
 
-@server.route("/executar", methods=["POST"])
-def executar():
-    dados = request.get_json()
-    return executar_codigo(dados)
+# Teste para saber se o servidor está ativo
+@server_bp.route("/health", methods=["GET"])
+def health_check():
+    return jsonify({
+        "status": "ok",
+        "message": "Servidor Flask ativo"
+    }), 200
 
-@server.route("/shutdown", methods=["POST"])
-def shutdown():
-    return encerrar_servidor()
+

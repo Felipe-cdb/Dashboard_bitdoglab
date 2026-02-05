@@ -1,79 +1,78 @@
-from app import create_app
-from app.services.mdns_service import iniciar_servidor, encerrar_servidor
-import tkinter as tk
-import threading, webbrowser
-from app import BASE_URL
-from datetime import datetime
+# run.py
+import signal
 import sys
-from tkinter import messagebox
+import threading
+import webbrowser
+import time
 
-flask_app = create_app()
+from app import create_app
+from app.services.mdns_service import (
+    encontrar_porta_livre,
+    registrar_mdns,
+    encerrar_mdns,
+)
 
-def iniciar_flask(host, porta):
-    """Inicia a aplicação Flask."""
-    flask_app.run(debug=False, host=host, port=porta, use_reloader=False)
+# =========================
+# CONFIGURAÇÕES
+# =========================
+NOME_DNS = "mydashboard"
+USAR_MDNS = True
 
-# === Inicialização do servidor ===
-# Caso deseja Compartilhar||Ocutar o dns com outros dispositivos
-# visível na rede-> USAR_MDNS=True
-# oculto apenas maquina local -> USAR_MDNS=False
-
-# --- Configurações ---
-NOME_DNS = "zoyblock"
-USAR_MDNS = False  # Mude para True para acessar de outros dispositivos na mesma rede
 app = create_app()
 
-# 1. Configura o servidor e define a URL global
-try:
-    host, porta, BASE_URL = iniciar_servidor(NOME_DNS, USAR_MDNS)
-    import app
-    app.BASE_URL = BASE_URL  # Atualiza o valor global em app
-except RuntimeError as e:
-    print(f"[ERRO] Falha ao iniciar servidor: {e}")
-    # Mostrar mensagem amigável
-    import tkinter.messagebox as messagebox
-    tk.Tk().withdraw()
-    messagebox.showerror("Erro ao iniciar servidor", "Não foi possível iniciar o servidor.\nTodas as portas já estão em uso.\nFeche outra instância ou libere uma porta.")
-    sys.exit(1)
+# =========================
+# ENCERRAMENTO LIMPO
+# =========================
+def shutdown_handler(signum, frame):
+    print("\n[INFO] Encerrando servidor...")
+    encerrar_mdns()
+    print("[INFO] Servidor finalizado corretamente.")
+    sys.exit(0)
 
-# 2. Inicia o Flask em uma thread separada para não bloquear a interface gráfica
-def iniciar_interface():
-    # Cria a interface Tkinter
-    root = tk.Tk()
-    root.title("ZoyBlock Servidor")
-    root.geometry("380x200")
-    root.resizable(False, False)
-    root.eval('tk::PlaceWindow . center')  # Centraliza a janela
+signal.signal(signal.SIGINT, shutdown_handler)
+signal.signal(signal.SIGTERM, shutdown_handler)
 
-    label = tk.Label(
-        root,
-        text=f"Servidor rodando em:\n{BASE_URL}",
-        font=("Segoe UI", 11),
-        wraplength=280,
-    )
-    label.pack(pady=20)
+# =========================
+# ABERTURA DO NAVEGADOR
+# =========================
+def abrir_navegador(url):
+    time.sleep(1)  # garante que o Flask subiu
+    webbrowser.open(url)
 
-    btn_abrir_navegador = tk.Button(
-        root,
-        text="Abrir no Navegador",
-        command=lambda: webbrowser.open_new(BASE_URL),
-    )
-    btn_abrir_navegador.pack(pady=5)
-
-    btn_sair = tk.Button(root, text="Sair", command=root.quit)
-    btn_sair.pack(pady=5)
-
-    root.protocol("WM_DELETE_WINDOW", root.quit)
-
+# =========================
+# MAIN
+# =========================
+def main():
     try:
-        root.mainloop()
-    except KeyboardInterrupt:
-        print("\n[INFO] Interrupção pelo teclado recebida.")
-        root.quit()
+        porta = encontrar_porta_livre()
+    except RuntimeError as e:
+        print(f"[ERRO] {e}")
+        sys.exit(1)
+
+    if USAR_MDNS:
+        host = "0.0.0.0"
+        registrar_mdns(NOME_DNS, porta)
+        base_url = f"http://{NOME_DNS}.local:{porta}"
+    else:
+        host = "127.0.0.1"
+        base_url = f"http://127.0.0.1:{porta}"
+
+    print(f"[INFO] Servidor iniciado em: {base_url}")
+    app.config["BASE_URL"] = base_url
+
+    # Thread separada para abrir navegador
+    threading.Thread(
+        target=abrir_navegador,
+        args=(base_url,),
+        daemon=True
+    ).start()
+
+    app.run(
+        host=host,
+        port=porta,
+        debug=False,
+        use_reloader=False
+    )
 
 if __name__ == "__main__":
-    flask_thread = threading.Thread(target=iniciar_flask, args=(host, porta), daemon=True)
-    flask_thread.start()
-
-    # Inicia a interface Tkinter na thread principal
-    iniciar_interface()
+    main()

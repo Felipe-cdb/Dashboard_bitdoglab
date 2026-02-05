@@ -1,50 +1,65 @@
-from flask import Blueprint, request
-from app.services.serial_service import listar_portas, conectar, desconectar, atualizar_baudrate, BAUDRATE
+from flask import Blueprint, request, jsonify
 
-hardware = Blueprint("hardware", __name__)
+hardware_bp = Blueprint("hardware", __name__)
 
-@hardware.route("/listar_portas")
-def listar():
-    portas = listar_portas()
-    return portas
+# -----------------------------
+# VISITAS
+# -----------------------------
+@hardware_bp.route("/visit", methods=["POST"])
+def receive_visit():
+    data = request.get_json(silent=True)
 
-@hardware.route("/conectar", methods=["POST"])
-def rota_conectar():
-    dados = request.get_json()
-    porta = dados.get("porta")
-    if conectar(porta):
-        return f"Conectado à porta {porta}"
-    else:
-        return "Erro ao conectar", 500
-    
-@hardware.route("/desconectar", methods=["POST"])
-def rota_desconectar():
-    if desconectar():
-        return "Desconectado com sucesso"
-    else:
-        return "Erro ao desconectar", 500
-    
+    if not data or "count" not in data:
+        return jsonify({"error": "Payload inválido"}), 400
 
-@hardware.route("/definir_placa", methods=["POST"])
-def definir_placa():
-    global placa_selecionada
-    dados = request.get_json()
-    placa = dados.get("placa", "arduino")
-    placa_selecionada = placa
-    print(f"[INFO] Placa selecionada: {placa_selecionada}")
-    return "Placa atualizada"
+    visit_count = data["count"]
+
+    print(f"[VISITA] Recebida: {visit_count}")
+
+    return jsonify({
+        "status": "ok",
+        "received": "visit",
+        "count": visit_count
+    }), 200
 
 
-@hardware.route("/atualiza_baudrate", methods=["POST"])
-def rota_baudrate():
-    data = request.get_json()
-    index = int(data.get('velo'))
-    # Lista de baudrates possíveis (indexado)
-    BAUDRATES_DISPONIVEIS = [9600, 19200, 38400, 57600, 115200]
-    baudrate = BAUDRATES_DISPONIVEIS[index] 
- 
-    if atualizar_baudrate(baudrate):
-        return f"Conectado à velocidade {baudrate}"
-    else:
-        return "Erro ao conectar", 500
-    
+# -----------------------------
+# TEMPERATURA / UMIDADE
+# -----------------------------
+@hardware_bp.route("/environment", methods=["POST"])
+def receive_environment():
+    data = request.get_json(silent=True)
+
+    if not data:
+        return jsonify({"error": "Payload inválido"}), 400
+
+    temperature = data.get("temperature")
+    humidity = data.get("humidity")
+
+    print(f"[AHT10] Temp={temperature}C  Umidade={humidity}%")
+
+    return jsonify({
+        "status": "ok",
+        "received": "environment"
+    }), 200
+
+
+# -----------------------------
+# COMPRA
+# -----------------------------
+@hardware_bp.route("/purchase", methods=["POST"])
+def receive_purchase():
+    data = request.get_json(silent=True)
+
+    if not data or "product_id" not in data:
+        return jsonify({"error": "Payload inválido"}), 400
+
+    product_id = data["product_id"]
+
+    print(f"[COMPRA] Produto: {product_id}")
+
+    return jsonify({
+        "status": "ok",
+        "received": "purchase",
+        "product_id": product_id
+    }), 200

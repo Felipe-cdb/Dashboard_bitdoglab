@@ -22,11 +22,10 @@
 │   │   ├── img
 │   │   └── lib
 │   └── templates
-│       ├── home
-│       │   ├── home.html
-│       │   ├── home.css
-│       │   └── home.js
-├── estrutura.txt
+│       ├── dashboard
+│       │   ├── dashboard.html
+│       │   ├── dashboard.css
+│       │   └── dashboard.js
 ├── LICENSE
 ├── README.txt
 ├── requirements.txt
