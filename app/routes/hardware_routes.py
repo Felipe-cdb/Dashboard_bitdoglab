@@ -1,65 +1,62 @@
 from flask import Blueprint, request, jsonify
 
-hardware_bp = Blueprint("hardware", __name__)
+# Prefixo único para hardware (fortemente recomendado)
+hardware_bp = Blueprint("hardware", __name__, url_prefix="/api")
 
 # -----------------------------
-# VISITAS
+# VISITA (evento)
 # -----------------------------
 @hardware_bp.route("/visit", methods=["POST"])
 def receive_visit():
-    data = request.get_json(silent=True)
+    data = request.get_json(silent=True) or {}
 
-    if not data or "count" not in data:
+    # Apenas evento, sem contador
+    if data.get("visit") != "ok":
         return jsonify({"error": "Payload inválido"}), 400
 
-    visit_count = data["count"]
-
-    print(f"[VISITA] Recebida: {visit_count}")
+    print("[VISITA] Evento recebido")
 
     return jsonify({
         "status": "ok",
-        "received": "visit",
-        "count": visit_count
+        "event": "visit"
     }), 200
 
 
 # -----------------------------
 # TEMPERATURA / UMIDADE
 # -----------------------------
-@hardware_bp.route("/environment", methods=["POST"])
-def receive_environment():
+@hardware_bp.route("/temp", methods=["POST"])
+def receive_temperature():
     data = request.get_json(silent=True)
 
-    if not data:
+    if not data or "temperature" not in data:
         return jsonify({"error": "Payload inválido"}), 400
 
-    temperature = data.get("temperature")
+    temperature = float(data["temperature"])
     humidity = data.get("humidity")
 
-    print(f"[AHT10] Temp={temperature}C  Umidade={humidity}%")
+    print(f"[TEMP] {temperature}°C | Umidade={humidity}%")
 
     return jsonify({
         "status": "ok",
-        "received": "environment"
+        "event": "temperature"
     }), 200
 
 
 # -----------------------------
-# COMPRA
+# COMPRA (evento)
 # -----------------------------
-@hardware_bp.route("/purchase", methods=["POST"])
+@hardware_bp.route("/compra", methods=["POST"])
 def receive_purchase():
-    data = request.get_json(silent=True)
+    data = request.get_json(silent=True) or {}
 
-    if not data or "product_id" not in data:
+    # Evento simples
+    if data.get("compra") != "ok":
         return jsonify({"error": "Payload inválido"}), 400
 
-    product_id = data["product_id"]
-
-    print(f"[COMPRA] Produto: {product_id}")
+    print("[COMPRA] Evento recebido")
 
     return jsonify({
         "status": "ok",
-        "received": "purchase",
-        "product_id": product_id
+        "event": "compra"
     }), 200

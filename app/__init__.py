@@ -6,10 +6,10 @@ def create_app():
     # =========================
     # REGISTRO DE ROTAS
     # =========================
-    from app.routes.hardware_routes import hardware_bp
     from app.routes.server_routes import server_bp
+    from app.routes.hardware_routes import hardware_bp
 
-    app.register_blueprint(hardware_bp)
     app.register_blueprint(server_bp)
+    app.register_blueprint(hardware_bp)
 
     return app
