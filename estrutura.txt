@@ -12,6 +12,12 @@
 
 ├── app
 │   ├── init.py
+├── db.py
+│   ├── models/
+│   │   ├── __init__.py
+│   │   ├── visit.py
+│   │   ├── sale.py
+│   │   └── environment.py
 │   ├── routes
 │   │   ├── hardware_routes.py
 │   │   └── server_routes.py
