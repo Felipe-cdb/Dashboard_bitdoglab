@@ -23,7 +23,7 @@
 <h1>📊 Dashboard RP2040</h1>
 
 <div class="card">👤 Visitas: <span id="visits">0</span></div>
-<div class="card">🛒 Compras: <span id="purchases">0</span></div>
+<div class="card">🛒 Compras: <span id="sales">0</span></div>
 <div class="card">🌡️ Temperatura: <span id="temp">--</span> °C</div>
 <div class="card">💧 Umidade: <span id="hum">--</span> %</div>
 
@@ -33,7 +33,7 @@ async function atualizar() {
     const data = await r.json();
 
     document.getElementById("visits").innerText = data.visits;
-    document.getElementById("purchases").innerText = data.purchases;
+    document.getElementById("sales").innerText = data.sales;
     document.getElementById("temp").innerText = data.temperature ?? "--";
     document.getElementById("hum").innerText = data.humidity ?? "--";
 }

@@ -4,7 +4,7 @@ _lock = Lock()
 
 state = {
     "visits": 0,
-    "purchases": 0,
+    "sales": 0,
     "temperature": None,
     "humidity": None
 }
@@ -13,9 +13,9 @@ def register_visit():
     with _lock:
         state["visits"] += 1
 
-def register_purchase():
+def register_sales():
     with _lock:
-        state["purchases"] += 1
+        state["sales"] += 1
 
 def update_environment(temp, hum):
     with _lock:

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.services.hardware_state import (
     register_visit,
-    register_purchase,
+    register_sales,
     update_environment
 )
 
@@ -21,13 +21,13 @@ def receive_visit():
 
 
 @hardware_bp.route("/compra", methods=["POST"])
-def receive_purchase():
+def receive_sales():
     data = request.get_json(silent=True) or {}
 
     if data.get("compra") != "ok":
         return jsonify({"error": "Payload inválido"}), 400
 
-    register_purchase()
+    register_sales()
     print("[COMPRA] Registrada")
 
     return jsonify({"status": "ok"}), 200
