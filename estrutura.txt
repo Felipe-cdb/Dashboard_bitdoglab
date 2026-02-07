@@ -1,15 +1,5 @@
 
 
-
-
-
-
-
-
-
-
-
-
 ├── app
 │   ├── init.py
 ├── db.py
@@ -22,32 +12,29 @@
 │   │   ├── hardware_routes.py
 │   │   └── server_routes.py
 │   ├── services
-│   │   └── serial_service.py
+│   │   ├── hardware_repository.py
+│   │   └── mdns_service.py
 │   ├── static
 │   │   ├── css
 │   │   ├── img
 │   │   └── lib
-│   └── templates
-│       ├── dashboard
-│       │   ├── dashboard.html
-│       │   ├── dashboard.css
-│       │   └── dashboard.js
+│   └──  templates/
+│   │   ├─ dashboard/
+│   │   ├─ dashboard.html
+│   │   ├─ dashboard.css
+│   │   └─ dashboard.js
+│   │   
+│   │   ├─ analytics/
+│   │   │  ├─ analytics.html
+│   │   │  ├─ analytics.css
+│   │   │  └─ analytics.js
+│   │   │
+│   │   └─ environment/
+│   │   ├─ environment.html
+│   │   ├─ environment.css
+│   │   └─ environment.js
 ├── LICENSE
 ├── README.txt
 ├── requirements.txt
 ├── run.py
 └── venv
-
-
-
-POST /api/visit
-{ "visit": "ok" }
-
-POST /api/compra
-{ "compra": "ok" }
-
-POST /api/temp
-{
-  "temperature": 26.4,
-  "humidity": 58.2
-}
