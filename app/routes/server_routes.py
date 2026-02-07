@@ -61,27 +61,38 @@ def dashboard_kpis():
 def dashboard_hourly():
     today = datetime.utcnow().date()
 
-    visits = (
+    visits = dict(
         db.session.query(
-            func.strftime("%H", Visit.created_at).label("hour"),
+            func.strftime("%H", Visit.created_at),
             func.count(Visit.id)
         )
         .filter(func.date(Visit.created_at) == today)
-        .group_by("hour")
+        .group_by(func.strftime("%H", Visit.created_at))
         .all()
     )
 
-    sales = (
+    sales = dict(
         db.session.query(
-            func.strftime("%H", Sale.created_at).label("hour"),
+            func.strftime("%H", Sale.created_at),
             func.count(Sale.id)
         )
         .filter(func.date(Sale.created_at) == today)
-        .group_by("hour")
+        .group_by(func.strftime("%H", Sale.created_at))
+        .all()
+    )
+
+    temps = dict(
+        db.session.query(
+            func.strftime("%H", EnvironmentLog.created_at),
+            func.avg(EnvironmentLog.temperature)
+        )
+        .filter(func.date(EnvironmentLog.created_at) == today)
+        .group_by(func.strftime("%H", EnvironmentLog.created_at))
         .all()
     )
 
     return jsonify({
-        "visits": dict(visits),
-        "sales": dict(sales)
+        "visits": visits,
+        "sales": sales,
+        "temperature": temps
     })

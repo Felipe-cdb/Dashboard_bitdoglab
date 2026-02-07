@@ -9,6 +9,9 @@
     <!-- Chart.js -->
     <script src="{{ url_for('static', filename='libs/chartjs/chart.js') }}"></script>
 
+    <!-- bootstrap css -->
+    <link href="{{ url_for('static', filename='libs/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+
     <!-- CSS Global -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
 
@@ -33,12 +36,12 @@
 
             <div class="nav-item" onclick="location.href='/analytics'">
                 <img src="{{ url_for('static', filename='imgs/icon_analytics.png') }}" alt="icone analytics" width="20" height="20">
-                Analytics
+                Analise & Relatórios
             </div>
 
             <div class="nav-item" onclick="location.href='/environment'">
                 <img src="{{ url_for('static', filename='imgs/icon_environment.png') }}" alt="icone environment" width="20" height="20">
-                Environment
+                Clima & Vendas
             </div>
         </aside>
 
@@ -46,14 +49,14 @@
 
             <div class="header">
                 <h2>Visão Geral</h2>
-                <p>Dados em tempo real do sistema</p>
+                <p>Análise de tráfego, conversão e impacto térmico</p>
             </div>
 
             <!-- KPI -->
             <section class="kpis">
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title">VISITAS</span>
+                        <span class="card-title">VISITANTES TOTAIS</span>
                         <div class="icon" style="background:#eff6ff;color:#2563eb">
                             <img src="{{ url_for('static', filename='imgs/group_visit.png') }}" alt="icone environment" width="20" height="20">
                         </div>
@@ -63,7 +66,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title">VENDAS</span>
+                        <span class="card-title">VENDAS REALIZADAS</span>
                         <div class="icon" style="background:#ecfdf5;color:#10b981">
                             <img src="{{ url_for('static', filename='imgs/shopping_bag.png') }}" alt="icone environment" width="20" height="20">
                         </div>
@@ -73,7 +76,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title">TEMPERATURA</span>
+                        <span class="card-title">TEMPERATURA ATUAL</span>
                         <div class="icon" style="background:#fef2f2;color:#ef4444">
                             <img src="{{ url_for('static', filename='imgs/temperature.png') }}" alt="icone environment" width="20" height="20">
                         </div>
@@ -83,7 +86,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title">UMIDADE</span>
+                        <span class="card-title">UMIDADE ATUAL</span>
                         <div class="icon" style="background:#ecfeff;color:#0891b2">
                             <img src="{{ url_for('static', filename='imgs/humidity_sensor.png') }}" alt="icone environment" width="20" height="20">
                         </div>
@@ -111,6 +114,7 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='libs/bootstrap/bootstrap.bundle.min.js') }}"></script>
 </body>
 
 </html>

@@ -77,3 +77,9 @@ python run.py
 ## ✅Para criação do builder (Intalador ou executavel)
 
  `pystaller xxsxafsaf`
+
+
+
+
+ Toda vez que for realimentar o banco com seed precisa
+python -m app.seeds.seed_database
