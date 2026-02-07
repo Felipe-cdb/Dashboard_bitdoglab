@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Chart.js -->
+    <script src="{{ url_for('static', filename='libs/chartjs/chart.js') }}"></script>
+
+    <!-- CSS Global -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+
+    <!-- CSS Dashboard -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='imgs/logo_main.png') }}" alt="icone dashboard" width="30" height="30">
+                MyDashboard
+            </div>
+
+            <div class="nav-item active">
+                <img src="{{ url_for('static', filename='imgs/icon_dashboard.png') }}" alt="icone dashboard" width="20" height="20">
+                Dashboard
+            </div>
+
+            <div class="nav-item" onclick="location.href='/analytics'">
+                <img src="{{ url_for('static', filename='imgs/icon_analytics.png') }}" alt="icone analytics" width="20" height="20">
+                Analytics
+            </div>
+
+            <div class="nav-item" onclick="location.href='/environment'">
+                <img src="{{ url_for('static', filename='imgs/icon_environment.png') }}" alt="icone environment" width="20" height="20">
+                Environment
+            </div>
+        </aside>
+
+        <main class="main">
+
+            <div class="header">
+                <h2>Visão Geral</h2>
+                <p>Dados em tempo real do sistema</p>
+            </div>
+
+            <!-- KPI -->
+            <section class="kpis">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">VISITAS</span>
+                        <div class="icon" style="background:#eff6ff;color:#2563eb">
+                            <img src="{{ url_for('static', filename='imgs/group_visit.png') }}" alt="icone environment" width="20" height="20">
+                        </div>
+                    </div>
+                    <div class="card-value" id="visits">0</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">VENDAS</span>
+                        <div class="icon" style="background:#ecfdf5;color:#10b981">
+                            <img src="{{ url_for('static', filename='imgs/shopping_bag.png') }}" alt="icone environment" width="20" height="20">
+                        </div>
+                    </div>
+                    <div class="card-value" id="sales">0</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">TEMPERATURA</span>
+                        <div class="icon" style="background:#fef2f2;color:#ef4444">
+                            <img src="{{ url_for('static', filename='imgs/temperature.png') }}" alt="icone environment" width="20" height="20">
+                        </div>
+                    </div>
+                    <div class="card-value"><span id="temp">--</span> °C</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">UMIDADE</span>
+                        <div class="icon" style="background:#ecfeff;color:#0891b2">
+                            <img src="{{ url_for('static', filename='imgs/humidity_sensor.png') }}" alt="icone environment" width="20" height="20">
+                        </div>
+                    </div>
+                    <div class="card-value"><span id="hum">--</span> %</div>
+                </div>
+            </section>
+
+            <!-- Charts -->
+            <section class="charts">
+                <div class="chart-box">
+                    <canvas id="chartVisits"></canvas>
+                </div>
+
+                <div class="chart-box">
+                    <canvas id="chartConversion"></canvas>
+                </div>
+
+                <div class="chart-box full">
+                    <canvas id="chartTemp"></canvas>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+
+</html>

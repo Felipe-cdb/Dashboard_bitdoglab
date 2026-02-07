@@ -2,37 +2,39 @@
 
 ├── app
 │   ├── init.py
-├── db.py
+│   ├── db.py
 │   ├── models/
 │   │   ├── __init__.py
 │   │   ├── visit.py
 │   │   ├── sale.py
 │   │   └── environment.py
-│   ├── routes
+│   ├── seeds/
+│   │   ├── __init__.py
+│   │   └── seed_database.py
+│   ├── routes/
 │   │   ├── hardware_routes.py
 │   │   └── server_routes.py
-│   ├── services
+│   ├── services/
 │   │   ├── hardware_repository.py
 │   │   └── mdns_service.py
-│   ├── static
-│   │   ├── css
-│   │   ├── img
-│   │   └── lib
+│   ├── static/
+│   │   ├── css/
+│   │   │   ├── analytics.css
+│   │   │   ├── dashboard.css
+│   │   │   ├── environment.css
+│   │   │   └── global.css
+│   │   ├── js/
+│   │   │   ├── analytics.js
+│   │   │   ├── dashboard.js
+│   │   │   └── environment.js
+│   │   ├── img/
+│   │   └── lib/
 │   └──  templates/
-│   │   ├─ dashboard/
 │   │   ├─ dashboard.html
-│   │   ├─ dashboard.css
-│   │   └─ dashboard.js
-│   │   
-│   │   ├─ analytics/
-│   │   │  ├─ analytics.html
-│   │   │  ├─ analytics.css
-│   │   │  └─ analytics.js
-│   │   │
-│   │   └─ environment/
-│   │   ├─ environment.html
-│   │   ├─ environment.css
-│   │   └─ environment.js
+│   │   ├─ analytics.html
+│   │   └─ environment.html
+├── instance
+│   └── database.db
 ├── LICENSE
 ├── README.txt
 ├── requirements.txt

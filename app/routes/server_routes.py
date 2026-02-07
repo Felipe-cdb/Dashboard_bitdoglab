@@ -10,17 +10,17 @@ server_bp = Blueprint("server", __name__)
 
 @server_bp.route("/")
 def dashboard():
-    return render_template("dashboard/dashboard.html")
+    return render_template("dashboard.html")
 
 
 @server_bp.route("/analytics")
 def analytics():
-    return render_template("analytics/analytics.html")
+    return render_template("analytics.html")
 
 
 @server_bp.route("/environment")
 def environment():
-    return render_template("environment/environment.html")
+    return render_template("environment.html")
 
 
 @server_bp.route("/api/state", methods=["GET"])
