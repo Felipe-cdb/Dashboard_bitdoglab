@@ -22,7 +22,7 @@ python --version
 
 Minha versão utilizada: python 3.11.9
 
-### Criar e ativar ambiente virtual (Venv) para o chatbot e visão computacional
+### Criar e ativar ambiente virtual (Venv)
 
 #### Criar venv
 Venv deve ser criado na raiz do projeto.
