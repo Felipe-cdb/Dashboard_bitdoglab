@@ -1,15 +1,14 @@
 # Dashboard_bitdoglab
-Dashboard criado com servidor flask que recebe dados da bitdoglab para analisar a quantidade de visitas e compras  de um comercio
+Dashboard criado com servidor flask que recebe dados da bitdoglab para analisar a quantidade de visitas e compras  de um estabelecimento
 
 ## 📦 Preparação do Ambiente
 
 ### Clonar o repositório
 
 ``` bash
-git https://github.com/ZoyEduca/ZoyBlocks_Electron_Live.git
-cd ZoyBlocks_Electron_Live
+git https://github.com/Felipe-cdb/Dashboard_bitdoglab.git
+cd Dashboard_bitdoglab
 ```
-
 
 ### Instalar Python no Windows
 Garanta que o Python esteja instalado corretamente:
@@ -72,14 +71,9 @@ Para iniciar a aplicação
 python run.py
 ```
 
-------------------------------------------------------------------------
+### Alimente o Banco de dados SQLite
+Para Visualizar os graficos e tabela pode utilizar o seed para alimentar o banco com dados fictícios, o scriot presente em app/seeds gera dados anterior a data e hora ao dia que o script for executado. Use esse script toda vez que desejar gerar novos dados para o servidor.
 
-## ✅Para criação do builder (Intalador ou executavel)
-
- `pystaller xxsxafsaf`
-
-
-
-
- Toda vez que for realimentar o banco com seed precisa
+``` bash
 python -m app.seeds.seed_database
+```
